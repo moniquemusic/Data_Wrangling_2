@@ -1,0 +1,37 @@
+#setup
+getwd()
+setwd("/Users/monicaseeley/Documents/R Files")
+library(dplyr)
+library(tidyr)
+library(readr)
+Titanic <- read_csv("titanic3.csv")
+View(Titanic)
+
+#change NA values in column "embarked" to "S"
+Titanic$embarked[Titanic$embarked == NA] <- "S"
+Titanic$embarked[Titanic$embarked == ""] <- "S"
+Titanic%>%filter(is.na(embarked))
+
+Titanic%>%filter(name == "Icard, Miss. Amelie")%>%select(embarked)
+Titanic$embarked[Titanic$name == "Icard, Miss. Amelie"] <- "S"
+
+Titanic%>%filter(name == "Stone, Mrs. George Nelson (Martha Evelyn)")%>%select(embarked)
+Titanic$embarked[Titanic$name == "Stone, Mrs. George Nelson (Martha Evelyn)"] <- "S"
+
+Titanic%>%filter(is.na(embarked))
+
+#Find the average of age column
+mean_age <- mean(Titanic$age, na.rm=TRUE)
+
+#Replace NA from age to column with the average
+Titanic$age[is.na(Titanic$age)] <-mean_age
+
+#Replace NA from boat column to None
+Titanic$boat[is.na(Titanic$boat)] <- "None"
+
+#Create "has_cabin_number" column
+#having a cabin number = 1
+Titanic <- Titanic%>%mutate(has_cabin_number = (ifelse(Titanic$cabin >= 1, 1, 0)))
+
+#not having a cabin number = 0
+Titanic$has_cabin_number[is.na(Titanic$has_cabin_number)] <- 0
